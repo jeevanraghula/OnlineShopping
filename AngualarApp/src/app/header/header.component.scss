@@ -1,0 +1,45 @@
+.header {
+  position: fixed;
+  top: 0;
+  width:100%;
+  box-shadow: 0 1px 8px #ddd;
+
+  .nav {
+    display: flex;
+    flex-direction: row;
+    background-color: deepskyblue;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+    .nav-item {
+      display: flex;
+      flex: 10%;
+      padding: 1rem !important;
+      justify-content: center;
+    }
+
+    .nav-tab{
+      cursor: pointer;
+    }
+
+    .nav-tab:hover {
+      background-color: #21b7e9;
+    }
+
+    .login {
+      float: right;
+    }
+
+    .search-input {
+      display: flex;
+
+      .icon-search {
+        background-color: white;
+      }
+
+      .search-box {
+        border:none;
+        border:0;
+      }
+    }
+  }
+}

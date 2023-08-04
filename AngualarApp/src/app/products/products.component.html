@@ -1,0 +1,18 @@
+<div class="product-set">
+  <div *ngFor="let product of productData; let i = index">
+    <div class="item-card hand-cursor">
+      <div class="icon">
+        <mat-icon [ngClass]="{ 'icon-fav-active': product.isfavorite, 'icon-fav': !product.isfavorite }"
+                  matTooltip="Add to favourites"
+                  matTooltipPosition="right"
+                  aria-label="icon that adds item to favourites"
+                  (click)="pushFavorite(product.name)">
+          favorite
+        </mat-icon>
+      </div>
+      <div class="image"><img src="./assets/dairy-products.png" alt="item_img"></div>
+      <div class="text">{{ product.name}}</div>
+      <div class="text">price  {{'₹'+product.price}}</div>
+    </div>
+  </div>
+</div>

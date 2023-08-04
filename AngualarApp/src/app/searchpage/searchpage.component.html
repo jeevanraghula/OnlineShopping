@@ -1,0 +1,12 @@
+<div class="searchpage">
+    <div *ngIf="notFound">
+        <p>Search Fail, please Enter correct data</p>
+    </div>
+    <div>
+        <div class="image"><img src="./assets/dairy-products.png" alt="item_img"></div>
+        <div clss="data">
+            <div class="text">name {{ name}}</div>
+            <div class="text">price  {{'₹'+price}}</div>
+         </div>
+    </div>
+</div>
