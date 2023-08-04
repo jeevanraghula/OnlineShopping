@@ -1,0 +1,16 @@
+
+<div class="header">
+  <div class="nav">
+    <div class="title nav-item" routerLink="">OnlineShopping</div>
+    <div class="nav-item">
+      <form class="search-input" role="search">
+        <input class="search-box" type="text" placeholder="search for product" (keyup)="searchproduct($event)" #search> 
+        <mat-icon class="icon-search">search</mat-icon>
+      </form>
+    </div>
+    <div class="nav-item nav-tab" routerLink="/favorites">favourites</div>
+    <div class="nav-item nav-tab" >cart</div>
+    <div class="nav-item nav-tab">Orders</div>
+    <div class="login nav-item nav-tab" routerLink="/login">login</div>
+  </div>
+</div>
