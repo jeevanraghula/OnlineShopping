@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using projectDB.DTO;
 using projectDB.Entities;
 using projectDB.Services;
 
@@ -18,14 +20,21 @@ namespace projectDB.Controllers
 
         //add fav products
         [HttpPost,Route("AddFavProduct")]
-        public IActionResult AddToFav(FavProducts favProd)
+        [Authorize]
+        public IActionResult AddToFav([FromBody] FavModel favProd)
         {
             try
             {
                 if (favProd!=null)
                 {
-                    _favouritesService.AddToFav(favProd);
+                    FavProducts prod = new FavProducts();
+                    prod.ProductId = favProd.ProductId;
+                    prod.UserId = favProd.UserId;
+
+                    _favouritesService.AddToFav(prod);
+                    Console.WriteLine($"favproducts :{prod.user}");
                     return StatusCode(200, favProd);
+
                 }
                 return StatusCode(400,"failed to add");
             }
@@ -37,18 +46,26 @@ namespace projectDB.Controllers
         }
 
         //Remove from fav
-        [HttpDelete,Route("RemoveFromFav/{id}")]
-        public IActionResult RemoveFav(int id) 
+        [HttpDelete,Route("RemoveFromFav")]
+        [Authorize]
+        public IActionResult RemoveFav([FromBody] FavModel favProd) 
         {
             try
             {
-                FavProducts prod = _favouritesService.GetFavProduct(id);
-                if (prod!=null) 
+                if (favProd != null)
                 {
-                    _favouritesService.RemoveFromFav(prod);
-                    return StatusCode(200, "removed from whislist");
+                    FavProducts prod = new FavProducts();
+                    prod.ProductId = favProd.ProductId;
+                    prod.UserId = favProd.UserId;
+
+                    Boolean removedOrNot = _favouritesService.RemoveFromFav(prod);
+
+                    if (removedOrNot)
+                    {
+                        return StatusCode(200, "removed from Favourites List");
+                    }
                 }
-                return StatusCode(400, "Failed to remove");
+                return StatusCode(400, "There is no product");
             }
             catch (Exception)
             {

@@ -16,6 +16,9 @@ namespace projectDB.Services
         User GetUser(int id);
 
 
+        User ValidateUser(string username, string password);
+
+
 
     }
 }

@@ -28,6 +28,8 @@ namespace projectDB.Services
         //get all products
         public List<Product> getAllProducts()
         {
+        //    var rand = new Random();
+        //    List<Product> randProducts = dBContextProduct.Products.OrderBy(x => rand.Next()).Take(3).ToList();
             return dBContextProduct.Products.ToList();
         }
 

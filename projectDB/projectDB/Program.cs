@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using projectDB.Entities;
 using projectDB.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace projectDB
 {
@@ -20,13 +23,47 @@ namespace projectDB
 
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IProductService, ProductService>();
-
             builder.Services.AddTransient<IOrderService, OrderService>();
-
-            builder.Services.AddTransient<IOrderedProductsService, OrderedProductsService>();
+            //builder.Services.AddTransient<IOrderedProductsService, OrderedProductsService>();
             builder.Services.AddTransient<IFavouritesService, FavouritesService>();
 
             builder.Services.AddControllers();
+
+            //Authentication and Authorization
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],  
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true
+                };
+            });
+
+
+            //adding cors 
+            builder.Services.AddCors( c =>
+            {
+                c.AddPolicy("apiOrigin", options => {
+
+                    options.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+
+                });
+            });
+
+
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -39,6 +76,10 @@ namespace projectDB
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            //to enable using it in UI
+            app.UseCors("apiOrigin");
+
 
             app.UseAuthorization();
 

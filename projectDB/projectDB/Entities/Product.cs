@@ -16,5 +16,7 @@ namespace projectDB.Entities
         public string? ProductDescription { get; set; }
         [Required]
         public string? category { get; set; }
+
+        public string ProductImgUrl { get; set; }
     }
 }

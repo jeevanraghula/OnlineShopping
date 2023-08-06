@@ -1,7 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using projectDB.Entities;
 using projectDB.Services;
+using projectDB.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace projectDB.Controllers
 {
@@ -9,13 +15,17 @@ namespace projectDB.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        IConfiguration configuration;
+
         private readonly IUserService _userService;     
-        public UserController(IUserService user)
+        public UserController(IConfiguration configuration, IUserService user)
         {
             _userService = user;
+            this.configuration = configuration;
         }
-        //add user
+        //add user(Register user)
         [HttpPost,Route("AddUser")]
+        [Authorize(Roles="admin")]
         public IActionResult AddUserC(User user)
         {
             try
@@ -34,6 +44,7 @@ namespace projectDB.Controllers
         }
 
         [HttpDelete,Route("RemoveUser")]
+        [Authorize(Roles = "admin")]
         public IActionResult RemoveUserC(User user) 
         {
             try
@@ -54,6 +65,7 @@ namespace projectDB.Controllers
 
         //getAllusers
         [HttpGet,Route("GetAllUsers")]
+        [Authorize(Roles = "admin")]
         public IActionResult GetAllUsersC()
         {
             try
@@ -74,6 +86,7 @@ namespace projectDB.Controllers
 
         //getuser
         [HttpGet,Route("GetUser/{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult GetUser(int id)
         {
             try
@@ -92,6 +105,67 @@ namespace projectDB.Controllers
                 throw;
             }
         }
+
+
+        ////Authenticate user
+        [AllowAnonymous]
+        [HttpPost,Route("Authentication")]
+
+        public IActionResult Authentication([FromBody] AuthRequest authRequest)
+        {
+            AuthResponse authResponse = null;
+            User? user = _userService.ValidateUser(authRequest.UserName, authRequest.Password);
+
+            if(user != null) 
+            { 
+                string jwtToken = GetToken(user);
+                authResponse = new AuthResponse()
+                {
+                    UserName = user.UserName,
+                    Token = jwtToken
+                };
+
+            }
+            return StatusCode(200, authResponse);
+
+        }
+
+
+        private string GetToken(User? user)
+        {
+            var issuer = configuration["Jwt:Issuer"];
+            var audience =  configuration["Jwt:Audience"];
+            var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]);
+            var signingCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha512Signature
+            );
+
+            var subject = new ClaimsIdentity(new[]
+            {
+                        new Claim(ClaimTypes.Name,user.UserName),
+                        new Claim(ClaimTypes.Role, user.Role),
+                    });
+
+            var expires = DateTime.UtcNow.AddMinutes(10);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = subject,
+                Expires = expires,
+                Issuer = issuer,
+                Audience = audience,
+                SigningCredentials = signingCredentials
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var jwtToken = tokenHandler.WriteToken(token);
+            return jwtToken;
+        }
+
+
+
 
 
 

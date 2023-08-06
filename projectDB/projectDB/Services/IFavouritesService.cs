@@ -8,7 +8,7 @@ namespace projectDB.Services
         void AddToFav(FavProducts item);
 
         
-        void RemoveFromFav(FavProducts item);
+        Boolean RemoveFromFav(FavProducts item);
         List<FavProducts> GetAllFavProducts();
 
         FavProducts GetFavProduct(int id);

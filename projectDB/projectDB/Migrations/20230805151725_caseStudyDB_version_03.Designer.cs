@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using projectDB.Entities;
 
@@ -11,9 +12,10 @@ using projectDB.Entities;
 namespace projectDB.Migrations
 {
     [DbContext(typeof(CaseStudyDbContext))]
-    partial class CaseStudyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230805151725_caseStudyDB_version_03")]
+    partial class caseStudyDB_version_03
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,10 +101,6 @@ namespace projectDB.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("ProductDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductImgUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductName")

@@ -47,5 +47,20 @@ namespace projectDB.Services
         { 
             return dbContext.Users.Find(id);
         }
+
+        //login user
+
+        public User ValidateUser(string username, string password)
+        {
+            try
+            {
+                return dbContext.Users.SingleOrDefault(u => u.UserName == username && u.Password == password);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

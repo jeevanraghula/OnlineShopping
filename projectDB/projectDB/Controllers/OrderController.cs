@@ -10,26 +10,31 @@ namespace projectDB.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
+        private readonly IOrderedProductsService _orderItemsService;
+     
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService, IOrderedProductsService orderItems)
         {
-            _orderService = orderService;   
+            _orderService = orderService;
+            _orderItemsService = orderItems;
         }
 
 
         //To add order endpoint
-        [HttpPost,Route("AddOrder")]
+        [HttpPost,Route("AddOrder/{id}")]
         public IActionResult AddOrder(Order order) 
         {
             try
             {
                 if (order != null)
-                {
-                    _orderService.AddOrder(order);
+                { 
+                   _orderService.AddOrder(order);
+                    return StatusCode(200, order);
                 }
-                
-                return StatusCode(200,order);
-
+                else
+                {
+                    return StatusCode(200, "no product found to add");
+                }
             }
             catch (Exception)
             {
@@ -90,6 +95,28 @@ namespace projectDB.Controllers
                 if(order!=null)
                     return StatusCode(200, order);
                 return StatusCode(400,"no order found");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+        //all ordered items of a specific user
+        [HttpGet, Route("GetAllOrderItems")]
+        public IActionResult getAllOrderItems()
+        {
+            try
+            {
+                List<OrderedProducts> orderItems = _orderItemsService.GetAllOrderItems();
+                if (orderItems != null)
+                {
+                    return StatusCode(200, orderItems);
+                }
+                return StatusCode(400, "no orderItems found");
+
             }
             catch (Exception)
             {

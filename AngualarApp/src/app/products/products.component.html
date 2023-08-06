@@ -1,18 +1,30 @@
-<div class="product-set">
-  <div *ngFor="let product of productData; let i = index">
-    <div class="item-card hand-cursor">
-      <div class="icon">
-        <mat-icon [ngClass]="{ 'icon-fav-active': product.isfavorite, 'icon-fav': !product.isfavorite }"
-                  matTooltip="Add to favourites"
-                  matTooltipPosition="right"
-                  aria-label="icon that adds item to favourites"
-                  (click)="pushFavorite(product.name)">
-          favorite
-        </mat-icon>
+<div class="products">
+  <div class="category">
+    <div class="category-2 item"><img src="../../assets/appearles.png" alt=""><p>Apparels</p></div>
+    <div class="category-1 item"><img src="../../assets/electronics.png" alt=""><p>Electronics</p></div>
+    <div class="category-4 item"><img src="../../assets/slippers.png" alt=""><p>Footwear</p></div>
+    <div class="category-5 item"><img src="../../assets/sports.png" alt=""><p>  Sports</p></div>
+    <div class="category-6 item"><img src="../../assets/stationary.png" alt=""><p>Stationery</p></div>
+    <div class="category-3 item"><img src="../../assets/homeneeds.png" alt=""><p>Home Needs</p></div>
+  </div>
+
+  <div class="product-set">
+    <div *ngFor="let product of allProducts;">
+      <div class="item-card hand-cursor">
+         <!--<div class="icon">
+
+          <mat-icon [ngClass]="{ 'icon-fav-active': product.isfavorite, 'icon-fav': !product.isfavorite }"
+                    matTooltip="Add to favourites"
+                    matTooltipPosition="right"
+                    aria-label="icon that adds item to favourites"
+                    (click)="pushFavorite(product.name)">
+            favorite
+          </mat-icon> 
+        </div>-->
+          <div class="image"><img src='{{product.productImgUrl}}' alt="item_img" class="prod"></div>
+          <div class="text">{{product.productName}}</div>
+          <div class="text">{{product.price}}</div>
       </div>
-      <div class="image"><img src="./assets/dairy-products.png" alt="item_img"></div>
-      <div class="text">{{ product.name}}</div>
-      <div class="text">price  {{'₹'+product.price}}</div>
     </div>
   </div>
 </div>

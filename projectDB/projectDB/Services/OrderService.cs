@@ -15,7 +15,7 @@ namespace projectDB.Services
         public void AddOrder(Order order)
         {
             dbContextOrder.Orders.Add(order);
-             dbContextOrder.SaveChanges();
+            dbContextOrder.SaveChanges();
         }
 
 
@@ -36,6 +36,14 @@ namespace projectDB.Services
         public Order GetOrderById(int id)
         {
             return dbContextOrder.Orders.Find(id);
+        }
+
+
+        //Get all order items
+        public List<OrderedProducts> GetAllOrderItems()
+        {
+            return dbContextOrder.OrderedProducts.ToList();
+
         }
 
     }
