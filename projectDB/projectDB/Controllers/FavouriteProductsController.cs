@@ -25,7 +25,7 @@ namespace projectDB.Controllers
         //add fav products
         [HttpPost, Route("AddFavProduct")]
         [Authorize]  //this actully checks whether the user is authenticated or not
-        public IActionResult AddToFav([FromBody] FavProductRequest product)
+        public IActionResult AddToFav([FromBody] ProductRequest product)
         {
             try
             {
@@ -37,14 +37,14 @@ namespace projectDB.Controllers
                     Boolean ar = _favouritesService.AddToFav(prod);
                     if(ar && prod.UserId>0)
                     {
-                        return StatusCode(200, "Added product from FavList");
+                        return StatusCode(200, new JsonResult("Added product from FavList"));
                     }
                     else
                     {
-                        return StatusCode(200, "Removed product from FavList");
+                        return StatusCode(200, new JsonResult("Removed product from FavList"));
                     }  
                 }
-                return StatusCode(400, "failed to add");
+                return StatusCode(400, new JsonResult("failed to add"));
             }
             catch (Exception)
             {
@@ -56,7 +56,7 @@ namespace projectDB.Controllers
         //Remove from fav
         [HttpPost, Route("RemoveFromFav")]
         [Authorize]
-        public IActionResult RemoveFav([FromBody] FavProductRequest favProd)
+        public IActionResult RemoveFav([FromBody] ProductRequest favProd)
         {
             try
             {
@@ -70,10 +70,10 @@ namespace projectDB.Controllers
 
                     if (removedOrNot)
                     {
-                        return StatusCode(200, "removed from Favourites List");
+                        return StatusCode(200, new JsonResult("removed from Favourites List"));
                     }
                 }
-                return StatusCode(400, "There is no product");
+                return StatusCode(400, new JsonResult("There is no product"));
             }
             catch (Exception)
             {
@@ -96,7 +96,7 @@ namespace projectDB.Controllers
                 {
                     return StatusCode(200, favProducts);
                 }
-                return StatusCode(400, "no fav products found");
+                return StatusCode(400, new JsonResult("no fav products found"));
             }
             catch (Exception)
             {

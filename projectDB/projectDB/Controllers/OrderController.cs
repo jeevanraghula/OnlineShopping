@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using projectDB.Entities;
+using projectDB.Models;
 using projectDB.Services;
 
 namespace projectDB.Controllers
@@ -10,31 +12,40 @@ namespace projectDB.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
-        private readonly IOrderedProductsService _orderItemsService;
+        //private readonly IOrderedProductsService _orderItemsService;
      
 
-        public OrderController(IOrderService orderService, IOrderedProductsService orderItems)
+        public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
-            _orderItemsService = orderItems;
+            //_orderItemsService = orderItems;
         }
 
 
         //To add order endpoint
-        [HttpPost,Route("AddOrder/{id}")]
-        public IActionResult AddOrder(Order order) 
+
+        [HttpPost,Route("AddOrder")]
+        [Authorize]  //this actully checks whether the user is authenticated or not
+        public IActionResult AddOrder(ProductRequest product) 
         {
             try
             {
-                if (order != null)
-                { 
-                   _orderService.AddOrder(order);
-                    return StatusCode(200, order);
-                }
-                else
+                if (product != null)
                 {
-                    return StatusCode(200, "no product found to add");
+                    Order order = new Order();
+                    order.OrderDate = DateTime.Now;
+                    order.UserId = product.UserId;
+                    Boolean o = _orderService.AddOrder(order,product.ProductId);
+                    if(o)
+                    {
+                        return StatusCode(400,new JsonResult("Order completed"));
+                    }
+                    else
+                    {
+                        return StatusCode(400, new JsonResult("failed to Order the product"));
+                    }
                 }
+                return StatusCode(400, new JsonResult("failed to add"));
             }
             catch (Exception)
             {
@@ -45,7 +56,7 @@ namespace projectDB.Controllers
 
 
         //To get all orders endpoint
-        [HttpGet,Route("GetAllOrders")]
+        [HttpGet,Route("GetAllOrders/{userId}")]
         public IActionResult GetAllOrders()
         {
             try
@@ -56,7 +67,7 @@ namespace projectDB.Controllers
                     return StatusCode(200, orders);
                 }
                 
-                return StatusCode(400, "no order found");
+                return StatusCode(400, new JsonResult("no order found"));
             }
             catch (Exception)
             {
@@ -76,7 +87,7 @@ namespace projectDB.Controllers
                     _orderService.DeleteOrder(order);
                     return StatusCode(200,"order deleted");
                 }
-                return StatusCode(400,"deletion failed");
+                return StatusCode(400,new JsonResult("deletion failed"));
             }
             catch (Exception)
             {
@@ -104,26 +115,26 @@ namespace projectDB.Controllers
         }
 
 
-        //all ordered items of a specific user
-        [HttpGet, Route("GetAllOrderItems")]
-        public IActionResult getAllOrderItems()
-        {
-            try
-            {
-                List<OrderedProducts> orderItems = _orderItemsService.GetAllOrderItems();
-                if (orderItems != null)
-                {
-                    return StatusCode(200, orderItems);
-                }
-                return StatusCode(400, "no orderItems found");
+        ////all ordered items of a specific user
+        //[HttpGet, Route("GetAllOrderItems")]
+        //public IActionResult getAllOrderItems()
+        //{
+        //    try
+        //    {
+        //        List<OrderedProducts> orderItems = _orderItemsService.GetAllOrderItems();
+        //        if (orderItems != null)
+        //        {
+        //            return StatusCode(200, orderItems);
+        //        }
+        //        return StatusCode(400, "no orderItems found");
 
-            }
-            catch (Exception)
-            {
+        //    }
+        //    catch (Exception)
+        //    {
 
-                throw;
-            }
-        }
+        //        throw;
+        //    }
+        //}
 
     }
 }

@@ -25,7 +25,7 @@ namespace projectDB.Services
                 {
                     FavProducts dupFav = (from f in _favDBcontext.FavOrderItems where f.ProductId == product.ProductId select f).FirstOrDefault(e => e.UserId == product.UserId);
 ;
-                    Console.WriteLine("dup element :", dupFav);
+                    //Console.WriteLine("dup element :", dupFav);
                     if (dupFav == null) //add to favorites 
                     {
                         _favDBcontext.FavOrderItems.Add(product);

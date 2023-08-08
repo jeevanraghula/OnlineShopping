@@ -23,25 +23,31 @@ export class ProductServiceService {
 
   api_path_favourite = "http://localhost:5119/api/FavouriteProducts/";
 
+  api_path_orders = "http://localhost:5119/api/Order/AddOrder";
+
+/*<-----------------------------------ALL Products -------------------------------->*/
   //to get all products 
   getAllProducts():Observable<Products[]>{
     return this.http.get<Products[]>(this.api_path_product);
   }
 
+/*<-----------------------------------Favourites -------------------------------->*/
+
   //Add to favourites 
   addToFavourites(Favproduct:FavModel):Observable<any>{
     console.log("jwt token :",this.token);
-    return this.http.post<Products[]>(this.api_path_favourite+"AddFavProduct",Favproduct,{
+    return this.http.post(this.api_path_favourite+"AddFavProduct",Favproduct,{
       headers : new HttpHeaders({
-        // "content-Type":"application/json", it is set by default to json
-        'Authorization': `Bearer ${this.token}`
+       // "content-Type":"text", //it is set by default to json
+        'Authorization': `Bearer ${this.token}`,
+        responseType: 'text'
       })
     });
   }
 
   //Remove fav product
   removeFavProduct(FavProdcut:FavModel):Observable<any>{
-    return this.http.post<Products>(this.api_path_favourite+"RemoveFromFav",FavProdcut,{
+    return this.http.post<string>(this.api_path_favourite+"RemoveFromFav",FavProdcut,{
       headers:new HttpHeaders({
         'Authorization': `Bearer ${this.token}`
       })
@@ -58,17 +64,15 @@ export class ProductServiceService {
     });
   }
 
+/*<-----------------------------------Order Products -------------------------------->*/
 
-  //check duplicate product is present in it or not
-  checkDuplicateProduct(FavProdcut:FavModel){
-    return this.http.post<boolean>(this.api_path_favourite+"checkFavDup",FavProdcut,{
-      headers: new HttpHeaders({
-        'Authorization': `Bearer ${this.token}`
-      })
-    });
-  }
+//Orderproduct==new changes
+addOrderService(order : FavModel):Observable<any>{
+  return this.http.post<Products>(this.api_path_orders,order,{
+    headers:new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`
+    })
+  });
+}
 
-  
-
-  
 }

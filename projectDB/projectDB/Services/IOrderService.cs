@@ -4,7 +4,7 @@ namespace projectDB.Services
 {
     public interface IOrderService
     {
-        void AddOrder(Order order);
+        Boolean AddOrder(Order order,int productId);
         void DeleteOrder(Order order);
 
         List<Order> GetAllOrders();

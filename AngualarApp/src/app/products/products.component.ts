@@ -22,6 +22,7 @@ export class ProductsComponent implements OnInit{
   //duplicate check
   public duplicate=false;
   public matchedProduct: MatchedProduct;
+  public order:FavModel;
   category:string="";
   public categories:string[] = ["Apparels","Electronics","Footwear","Home Needs","Sports","Stationery"];
   
@@ -29,32 +30,18 @@ export class ProductsComponent implements OnInit{
     this.productdataservice.getAllProducts().subscribe(response => 
       this.allProducts = response
       );
+      this.userId = Number(localStorage.getItem("userId"));
   }
 
   ngOnInit(){
 
   }
 
-  // updateFavorites(productName:string) {
-  //       
-  //     }
-
-
-  
+  /*<--------------------------------favorites-------------------------------> */
 
   onClickFavProduct(productId:number){
     this.userId = Number(localStorage.getItem("userId"));
     this.addTFavouriteProducts({productId,userId:this.userId});
-    // console.log("dproducts 01 ");
-    // this.productdataservice.checkDuplicateProduct({productId,userId:this.userId}).subscribe(response =>{
-    //   this.duplicate = response;
-    //   if(!this.duplicate){
-    //     console.log("dproducts of else");
-    //      this.addTFavouriteProducts({productId,userId:this.userId});
-    //      this.duplicate=false;
-    //   }
-    // })
-    
   }
 
   //Adding favProducts 
@@ -66,7 +53,6 @@ export class ProductsComponent implements OnInit{
   getAllFavouriteProducts(){
     this.productdataservice.getAllFavProducts().subscribe(response => {
       this.favProducts = response;
-    
     }) 
     console.log("favProducts: ",this.favProducts);
     this.favProducts.forEach(element => {
@@ -74,7 +60,7 @@ export class ProductsComponent implements OnInit{
     });
   }
 
-//categoery
+/*<--------------------------categoery---------------------------->*/
 
 displayCategory(event:any)
   {
@@ -91,53 +77,15 @@ displayCategory(event:any)
   }
 
 
-
-
-
-
-
-  // showAllProducts(){
-  //   let c=0;
-  //   this.allProducts.forEach(function(p) {
-  //     c+=1;
-  //   })
-  //   console.log("count :"+c);
-  // }
-
-  
-//   category:string=""
-//   showcategory:boolean=false;
-//   productData$: Observable<Product[]>;
-
-//   constructor(private productdataservice: ProductdataService) {
-//     this.productData$ = this.productdataservice.getData();
-//    }
-
-//   ngOnInit() {
-// //this.productData$ = this.productdataservice.getData();
-//   }
-
-//   pushFavorite(pname: string) {
-//     this.productdataservice.updateFavorites(pname);
-//   }
-
-//   displayCategory(event:any)
-//   {
-//     this.showcategory=true;
-//     const target = event.target as HTMLElement;
-//     const cItemDiv = target.closest('.c-item');
-
-//     if (cItemDiv) {
-//       this.category = cItemDiv.lastElementChild.innerHTML;
-//     }
-//     console.log("val is : ",this.category);
-
-//     this.productData$ = this.productdataservice.getData().pipe(
-//       // Filter the product data based on the selected category
-//       // filter()
-//      map((data : Product[]) => data.filter((x) => x.category === this.category))
-//     );
-//   }
-
+/* <------------------------------------- Orders -------------------------------------> */
+addOrder(productId:number){
+  this.order = {
+    productId:productId,
+    userId:this.userId
+  }
+  this.productdataservice.addOrderService(this.order).subscribe(response => {
+    console.log("order response",response)
+  });
+}
 
 }

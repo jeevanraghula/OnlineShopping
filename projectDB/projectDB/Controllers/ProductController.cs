@@ -25,7 +25,7 @@ namespace projectDB.Controllers
                 Product product = _productService.GetProduct(id);
                 if(product == null)
                 {
-                    return StatusCode(400,"no product found");
+                    return StatusCode(400,new JsonResult("no product found"));
                 }
                 return StatusCode(200, product);
             }
@@ -91,9 +91,9 @@ namespace projectDB.Controllers
                 if (product != null)
                 {
                     _productService.deleteProduct(product);
-                    return StatusCode(200, "product deleted");
+                    return StatusCode(200, new JsonResult("product deleted"));
                 }
-                return StatusCode(200, "failed to delete");
+                return StatusCode(200, new JsonResult("failed to delete"));
             }
             catch (Exception)
             {
