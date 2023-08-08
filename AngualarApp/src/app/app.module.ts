@@ -17,6 +17,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductsComponent } from './products/products.component';
 import { ProductServiceService } from './Services/product-service.service';
+import { FavoritesComponent } from './header/favorites/favorites.component';
+import { SearchpageComponent } from './searchpage/searchpage.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { ProductServiceService } from './Services/product-service.service';
     AuthComponent,
     NoPageFoundComponent,
     ProductsComponent,
-   
+    FavoritesComponent,
+    SearchpageComponent
   ],
   imports: [
     BrowserModule,

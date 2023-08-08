@@ -6,5 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent {
+  constructor(){
+    
+  }
 
+  logOut(){
+    localStorage.removeItem("token");
+    console.log("rmeoved");
+  }
 }

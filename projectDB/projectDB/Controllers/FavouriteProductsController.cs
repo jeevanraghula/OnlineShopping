@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using projectDB.DTO;
 using projectDB.Entities;
+using projectDB.Models;
 using projectDB.Services;
+using System.Security.Claims;
 
 namespace projectDB.Controllers
 {
@@ -12,31 +15,36 @@ namespace projectDB.Controllers
     public class FavouriteProductsController : ControllerBase
     {
         private readonly IFavouritesService _favouritesService;
+        //private readonly int LocalUserId;
 
         public FavouriteProductsController(IFavouritesService favouritesService)
         {
-            _favouritesService = favouritesService; 
+            _favouritesService = favouritesService;
         }
 
         //add fav products
-        [HttpPost,Route("AddFavProduct")]
-        [Authorize]
-        public IActionResult AddToFav([FromBody] FavModel favProd)
+        [HttpPost, Route("AddFavProduct")]
+        [Authorize]  //this actully checks whether the user is authenticated or not
+        public IActionResult AddToFav([FromBody] FavProductRequest product)
         {
             try
             {
-                if (favProd!=null)
+                if (product != null)
                 {
                     FavProducts prod = new FavProducts();
-                    prod.ProductId = favProd.ProductId;
-                    prod.UserId = favProd.UserId;
-
-                    _favouritesService.AddToFav(prod);
-                    Console.WriteLine($"favproducts :{prod.user}");
-                    return StatusCode(200, favProd);
-
+                    prod.ProductId = product.ProductId;
+                    prod.UserId = product.UserId;
+                    Boolean ar = _favouritesService.AddToFav(prod);
+                    if(ar && prod.UserId>0)
+                    {
+                        return StatusCode(200, "Added product from FavList");
+                    }
+                    else
+                    {
+                        return StatusCode(200, "Removed product from FavList");
+                    }  
                 }
-                return StatusCode(400,"failed to add");
+                return StatusCode(400, "failed to add");
             }
             catch (Exception)
             {
@@ -46,9 +54,9 @@ namespace projectDB.Controllers
         }
 
         //Remove from fav
-        [HttpDelete,Route("RemoveFromFav")]
+        [HttpPost, Route("RemoveFromFav")]
         [Authorize]
-        public IActionResult RemoveFav([FromBody] FavModel favProd) 
+        public IActionResult RemoveFav([FromBody] FavProductRequest favProd)
         {
             try
             {
@@ -75,17 +83,20 @@ namespace projectDB.Controllers
         }
 
         //get all fav products
-        [HttpGet,Route("GetAllFavouriteProducts")]
-        public IActionResult GetAllFavProducts()
+        [HttpPost, Route("GetAllFavouriteProducts")]
+        [Authorize]
+        public IActionResult GetAllFavProducts([FromBody] int userId)
         {
+            //var user = HttpContext.User;
+            //int localUserId = user.Identity.Name;
             try
             {
-                List<FavProducts> favProducts = _favouritesService.GetAllFavProducts();
-                if (favProducts!=null)
+                List<Product> favProducts = _favouritesService.GetAllFavProducts(userId);
+                if (favProducts != null)
                 {
-                    return StatusCode(200,favProducts);
+                    return StatusCode(200, favProducts);
                 }
-                return StatusCode(400,"no fav products found");
+                return StatusCode(400, "no fav products found");
             }
             catch (Exception)
             {

@@ -1,29 +1,31 @@
 <div class="products">
   <div class="category">
-    <div class="category-2 item"><img src="../../assets/appearles.png" alt=""><p>Apparels</p></div>
-    <div class="category-1 item"><img src="../../assets/electronics.png" alt=""><p>Electronics</p></div>
-    <div class="category-4 item"><img src="../../assets/slippers.png" alt=""><p>Footwear</p></div>
-    <div class="category-5 item"><img src="../../assets/sports.png" alt=""><p>  Sports</p></div>
-    <div class="category-6 item"><img src="../../assets/stationary.png" alt=""><p>Stationery</p></div>
-    <div class="category-3 item"><img src="../../assets/homeneeds.png" alt=""><p>Home Needs</p></div>
+    <div class="category-2 item" (click)="displayCategory($event)"><img src="../../assets/appearles.png" alt=""><p>Apparels</p></div>
+    <div class="category-1 item" (click)="displayCategory($event)"><img src="../../assets/electronics.png" alt=""><p>Electronics</p></div>
+    <div class="category-4 item" (click)="displayCategory($event)"><img src="../../assets/slippers.png" alt=""><p>Footwear</p></div>
+    <div class="category-5 item" (click)="displayCategory($event)"><img src="../../assets/sports.png" alt=""><p>Sports</p></div>
+    <div class="category-6 item" (click)="displayCategory($event)"><img src="../../assets/stationary.png" alt=""><p>Stationery</p></div>
+    <div class="category-3 item" (click)="displayCategory($event)"><img src="../../assets/homeneeds.png" alt=""><p>Home Needs</p></div>
   </div>
-
   <div class="product-set">
     <div *ngFor="let product of allProducts;">
-      <div class="item-card hand-cursor">
-         <!--<div class="icon">
-
-          <mat-icon [ngClass]="{ 'icon-fav-active': product.isfavorite, 'icon-fav': !product.isfavorite }"
+      <div class="item-card">
+        <div class="icon">
+          <mat-icon class="icon-fav"
                     matTooltip="Add to favourites"
                     matTooltipPosition="right"
                     aria-label="icon that adds item to favourites"
-                    (click)="pushFavorite(product.name)">
+                    (click)="onClickFavProduct(product.productId)">
             favorite
           </mat-icon> 
-        </div>-->
+        </div> 
           <div class="image"><img src='{{product.productImgUrl}}' alt="item_img" class="prod"></div>
           <div class="text">{{product.productName}}</div>
-          <div class="text">{{product.price}}</div>
+          <div class="text">Price <b>{{'₹'+product.price}}</b></div>
+          <div class="card-buttons">
+            <button class="cart btn"><b>Cart</b></button>
+            <button class="order btn"><b>Order</b></button>
+          </div>
       </div>
     </div>
   </div>

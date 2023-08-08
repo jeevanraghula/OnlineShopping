@@ -8,16 +8,16 @@
       </div>
       <div class="nav-item0">
         <form class="search-input" role="search">
-         <input class="search-box" type="text" placeholder="search for product">  
-         <!-- (keyup)="searchproduct !-- ($event)" #search -->
+         <input class="search-box" value=""type="text" placeholder="search for product" 
+         (keyup)="searchproduct($event)" #search>
           <mat-icon class="icon-search">search</mat-icon>
         </form>
       </div>
     </div>
     <div class="navbar-right">
       <div class="nav-item1 nav-tab" routerLink="/favorites">Favourites</div>
-      <div class="nav-item2 nav-tab" >Cart</div>
+      <div class="nav-item2 nav-tab">Cart</div>
       <div class="nav-item3 nav-tab">Orders</div>
-      <div class="login nav-item4 nav-tab" routerLink="/login">Sign In / Sign Up</div>
+      <div class="login nav-item4 nav-tab" (click)="checkLogin()">{{(islogin)?'Logout':'Login / Register'}}</div>
     </div>
   </div>

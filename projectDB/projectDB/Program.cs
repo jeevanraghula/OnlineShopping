@@ -80,7 +80,7 @@ namespace projectDB
             //to enable using it in UI
             app.UseCors("apiOrigin");
 
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

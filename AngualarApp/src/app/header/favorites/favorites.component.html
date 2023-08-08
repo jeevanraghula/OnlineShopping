@@ -1,0 +1,18 @@
+<div class="product-set">
+    <div *ngFor="let product of onlyFavProducts;">
+      <div class="item-card hand-cursor">
+         <div class="icon">
+          <mat-icon class="icon-fav"
+                    matTooltip="Add to favourites"
+                    matTooltipPosition="right"
+                    aria-label="icon that adds item to favourites"
+                    (click)="removeFromFavProduct(product.productId)">
+            favorite
+          </mat-icon>
+        </div>
+          <div class="image"><img src='{{product.productImgUrl}}' alt="item_img" class="prod"></div>
+          <div class="text">{{product.productName}}</div>
+          <div class="text">{{product.price}}</div>
+      </div>
+    </div>
+  </div>

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-// import { ProductdataService } from '../productdata.service';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { Products } from '../models/ProductsModel';
+import { ProductServiceService } from '../Services/product-service.service';
+import { UserService } from '../Services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -9,13 +10,34 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-//   constructor(private productdataService: ProductdataService, private router : Router){}
-//  searchproduct(event : any)
-//  {
-//   this.productdataService.product.forEach(element => { 
-//     if(element.name === event.target.value) 
-//      this.router.navigate(['/search', element.name]);
-//   });
-//  }
- 
+  islogin:boolean;
+  product:Products[];
+
+ constructor(private productdataService: ProductServiceService, private router : Router, private userService : UserService){
+    this.userService.checklogin.subscribe(x=>this.islogin=x);
+    this.productdataService.getAllProducts().subscribe(data=>
+      this.product=data);
+  }
+
+  checkLogin(){
+    if(!this.islogin)
+      this.router.navigateByUrl('authenticate');
+    else{
+      this.userService.islogin.next(false);
+      localStorage.removeItem('jwt');
+      localStorage.removeItem('userId');
+      this.router.navigate(['/']);
+    }
+  }
+
+  searchproduct(event : any)
+ {
+  this.product.forEach(element => { 
+    if(element.productName === event.target.value){
+      this.router.navigate(['/search', element.productName]);
+      event.target.value=""
+    }
+  });
+  
+ }
 }

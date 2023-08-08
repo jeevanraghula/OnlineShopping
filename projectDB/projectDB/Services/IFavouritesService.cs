@@ -1,16 +1,20 @@
-﻿using projectDB.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
+using projectDB.Entities;
+using projectDB.Models;
 
 namespace projectDB.Services
 {
     public interface IFavouritesService
     {
         //methods
-        void AddToFav(FavProducts item);
+        Boolean AddToFav(FavProducts product);
 
         
         Boolean RemoveFromFav(FavProducts item);
-        List<FavProducts> GetAllFavProducts();
+        List<Product> GetAllFavProducts(int userId);
 
         FavProducts GetFavProduct(int id);
+
+        //Boolean dupCeck(FavProducts dup);
     }
 }

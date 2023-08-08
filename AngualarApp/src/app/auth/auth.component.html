@@ -1,26 +1,28 @@
 <div class="container">
-    <form action="#" [formGroup]="authForm">
-        <div class="item1">
-            <label for="username">Username :</label>
-            <input type="text" formControlName="username">
+    <div><mat-icon routerLink="">close</mat-icon></div>
+    <div class="form-title"><p><strong>Login/Register</strong></p></div>
+    <form action="#" [formGroup]="authForm" (ngSubmit)="LoginUser()">
+        <div class="form-item">
+            <label for="username">Enter Username :</label><br>
+            <input type="text" placeholder="username"formControlName="username">
         </div>
 
-        <div class="item2">
+        <!-- <div class="item2" *ngIf="aleardyUser">
             <label for="email">Email :</label>
             <input type="email" formControlName="email">
+        </div> -->
+
+        <div class="form-item">
+            <label for="password">Enter Password :</label><br>
+            <input type="password" placeholder="password"formControlName="password">
         </div>
 
-        <div class="item3">
-            <label for="password">Password :</label>
-            <input type="password" formControlName="password">
+        <div class="form-item">
+            <label for="password">Confirm Password :</label><br>
+            <input type="password" placeholder="********" formControlName="confirmPassword">
         </div>
 
-        <div class="item4">
-            <label for="password">Confirm Password :</label>
-            <input type="password" formControlName="confirmPassword">
-        </div>
-
-        <button>Submit</button>
+        <button class="button"><b>Submit</b></button>
     </form>
 
 </div>

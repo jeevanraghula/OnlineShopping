@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.SignalR;
 
 namespace projectDB.Controllers
 {
@@ -121,6 +122,7 @@ namespace projectDB.Controllers
                 string jwtToken = GetToken(user);
                 authResponse = new AuthResponse()
                 {
+                    UserId = user.UserId,
                     UserName = user.UserName,
                     Token = jwtToken
                 };
@@ -141,8 +143,10 @@ namespace projectDB.Controllers
                 SecurityAlgorithms.HmacSha512Signature
             );
 
+            //this claims used to get the current user in the controllers
             var subject = new ClaimsIdentity(new[]
             {
+                        new Claim(ClaimTypes.NameIdentifier,user.UserId.ToString()),
                         new Claim(ClaimTypes.Name,user.UserName),
                         new Claim(ClaimTypes.Role, user.Role),
                     });

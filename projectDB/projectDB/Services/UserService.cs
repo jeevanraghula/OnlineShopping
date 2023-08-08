@@ -54,8 +54,12 @@ namespace projectDB.Services
         {
             try
             {
+                //User user = dbContext.Users.Find(username,password);
+                //User user = (User)from f in dbContext.Users where username==f.UserName && password==f.Password select f;
                 return dbContext.Users.SingleOrDefault(u => u.UserName == username && u.Password == password);
+                
             }
+
             catch (Exception)
             {
 
