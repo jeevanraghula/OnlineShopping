@@ -1,4 +1,5 @@
 ﻿using projectDB.Entities;
+using projectDB.Models;
 
 namespace projectDB.Services
 {
@@ -46,11 +47,49 @@ namespace projectDB.Services
 
         //get all orders
 
-        public List<Order> GetAllOrders()
+        public List<OrderAnonymousModel> GetAllOrders(int userId)
         {
             //to get all orders
-            //var allOrders = from o in dbContextOrder.Orders
-            return dbContextOrder.Orders.ToList();
+            //List<OrderAnonymousModel> allOrders = (from u in (from o in dbContextOrder.Orders
+            //                           join op in dbContextOrder.OrderedProducts on o.OrderId equals op.orderId
+            //                           select new OrderAnonymousModel()
+            //                           {
+            //                               OrderId = o.OrderId,
+            //                               OrderDate = o.OrderDate,
+            //                               UserId = o.UserId,
+            //                               ProductId = op.ProductId
+            //                           })
+            //                where u.UserId == userId && u.ProductId == productId
+            //                select u).ToList();
+
+            List<OrderAnonymousModel> allOrders = (from ap in (from u in (from o in dbContextOrder.Orders
+                                                   join op in dbContextOrder.OrderedProducts on o.OrderId equals op.orderId
+                                                   select new 
+                                                   {
+                                                        o.OrderId,
+                                                        o.OrderDate,
+                                                        o.UserId,
+                                                        op.ProductId
+                                                   })
+                                        where u.UserId == userId
+                                        select u)
+                            join p in dbContextOrder.Products on ap.ProductId equals p.ProductId
+                            select new OrderAnonymousModel()
+                            {
+                                ProductId = p.ProductId,
+                                ProductName = p.ProductName,
+                                Price= p.Price,
+                                ProductDescription = p.ProductDescription,
+                                Category = p.category,
+                                ProductImgUrl = p.ProductImgUrl,
+                                OrderId = ap.OrderId,
+                                OrderDate = ap.OrderDate
+
+                            }).ToList();
+                         
+
+
+            return allOrders;
         }
 
         //get order by id

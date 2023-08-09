@@ -78,6 +78,8 @@ displayCategory(event:any)
 
 
 /* <------------------------------------- Orders -------------------------------------> */
+
+//to add order
 addOrder(productId:number){
   this.order = {
     productId:productId,

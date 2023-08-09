@@ -57,12 +57,13 @@ namespace projectDB.Controllers
 
         //To get all orders endpoint
         [HttpGet,Route("GetAllOrders/{userId}")]
-        public IActionResult GetAllOrders()
+        public IActionResult GetAllOrders([FromRoute] int userId)
         {
             try
             {
-                List<Order> orders = _orderService.GetAllOrders();
-                if(orders != null)
+                List<OrderAnonymousModel> orders = _orderService.GetAllOrders(userId);
+
+                if(orders!=null)
                 {
                     return StatusCode(200, orders);
                 }

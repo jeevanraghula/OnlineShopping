@@ -74,11 +74,13 @@
         width: 75px;
         border:none;
         border-radius: 15px;
-        box-shadow:inset 1px 0px 19px 0px rgba(0, 0, 0, 0.2); /* this adds the "card" effect */
+        background-color: black;
+        color: powderblue;
+        // box-shadow: black; /* this adds the "card" effect */
       }
       .btn:hover{
         color:rgb(93, 214, 230);
-        box-shadow:inset 1px 0px 19px 0px  rgb(153, 182, 185);
+        box-shadow: 1px 0px 19px 0px  rgb(153, 182, 185);
         cursor: pointer;
       }
       .order{

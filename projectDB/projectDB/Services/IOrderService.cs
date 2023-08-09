@@ -1,4 +1,5 @@
 ﻿using projectDB.Entities;
+using projectDB.Models;
 
 namespace projectDB.Services
 {
@@ -7,7 +8,7 @@ namespace projectDB.Services
         Boolean AddOrder(Order order,int productId);
         void DeleteOrder(Order order);
 
-        List<Order> GetAllOrders();
+        List<OrderAnonymousModel> GetAllOrders(int userId);
 
         Order GetOrderById(int id);
     }
