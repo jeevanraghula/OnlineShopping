@@ -6,6 +6,7 @@ import { Observable, map, filter } from 'rxjs';
 import { Products,MatchedProduct } from '../models/ProductsModel';
 import { Router } from '@angular/router';
 import { FavModel } from '../models/FavProductsModel';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
   selector: 'app-products',
@@ -26,7 +27,7 @@ export class ProductsComponent implements OnInit{
   category:string="";
   public categories:string[] = ["Apparels","Electronics","Footwear","Home Needs","Sports","Stationery"];
   
-  constructor(private productdataservice: ProductServiceService,private router:Router) {
+  constructor(private productdataservice: ProductServiceService,private router:Router,private auth:AuthService) {
     this.productdataservice.getAllProducts().subscribe(response => 
       this.allProducts = response
       );
@@ -40,8 +41,11 @@ export class ProductsComponent implements OnInit{
   /*<--------------------------------favorites-------------------------------> */
 
   onClickFavProduct(productId:number){
-    this.userId = Number(localStorage.getItem("userId"));
-    this.addTFavouriteProducts({productId,userId:this.userId});
+    if(this.auth.isAuthenticated()){
+      this.userId = Number(localStorage.getItem("userId"));
+      this.addTFavouriteProducts({productId,userId:this.userId});   
+    }
+    else{alert("Please Login");}
   }
 
   //Adding favProducts 
