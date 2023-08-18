@@ -4,6 +4,7 @@ using projectDB.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace projectDB
 {
@@ -11,6 +12,7 @@ namespace projectDB
     {
         public static void Main(string[] args)
         {
+            //to add new configuartions and providers for the application
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -25,17 +27,19 @@ namespace projectDB
             builder.Services.AddTransient<IProductService, ProductService>();
             builder.Services.AddTransient<IOrderService, OrderService>();
             //builder.Services.AddTransient<IOrderedProductsService, OrderedProductsService>();
-            builder.Services.AddTransient<IFavouritesService, FavouritesService>();
+            builder.Services. AddTransient<IFavouritesService, FavouritesService>();
 
             builder.Services.AddControllers();
 
             //Authentication and Authorization
+            //registers required services for authentication
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(o =>
+            }).AddJwtBearer(o => //JWT bearer authentication performs authentication by extracting and validating
+                                 //a JWT token from the Authorization request header.
             {
                 o.TokenValidationParameters = new TokenValidationParameters
                 {

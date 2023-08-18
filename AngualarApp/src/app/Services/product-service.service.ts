@@ -47,8 +47,8 @@ export class ProductServiceService {
   }
 
   //Remove fav product
-  removeFavProduct(FavProdcut:FavModel):Observable<any>{
-    return this.http.post<string>(this.api_path_favourite+"RemoveFromFav",FavProdcut,{
+  removeFavProduct(FavProdcut:FavModel):Observable<Products[]>{
+    return this.http.post<Products[]>(this.api_path_favourite+"RemoveFromFav",FavProdcut,{
       headers:new HttpHeaders({
         'Authorization': `Bearer ${this.token}`
       })

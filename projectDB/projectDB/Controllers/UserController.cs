@@ -135,9 +135,11 @@ namespace projectDB.Controllers
 
         private string GetToken(User? user)
         {
+            //JWT token : [ Header + payload(claims) + signature ]
             var issuer = configuration["Jwt:Issuer"];
             var audience =  configuration["Jwt:Audience"];
             var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]);
+            //symmetric encryption : same key for encryption and decryption
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha512Signature
@@ -153,6 +155,7 @@ namespace projectDB.Controllers
 
             var expires = DateTime.UtcNow.AddMinutes(10);
 
+            //descriptor : a piece of stored data the indicates how other data stored. (2nd part : payload)
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = subject,
@@ -162,6 +165,7 @@ namespace projectDB.Controllers
                 SigningCredentials = signingCredentials
             };
 
+            //3rd part : signature
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var jwtToken = tokenHandler.WriteToken(token);

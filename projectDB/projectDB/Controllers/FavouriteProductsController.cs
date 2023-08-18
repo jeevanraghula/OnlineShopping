@@ -37,11 +37,11 @@ namespace projectDB.Controllers
                     Boolean ar = _favouritesService.AddToFav(prod);
                     if(ar && prod.UserId>0)
                     {
-                        return StatusCode(200, new JsonResult("Added product from FavList"));
+                        return StatusCode(200,_favouritesService.GetAllFavProducts(prod.UserId));
                     }
                     else
                     {
-                        return StatusCode(200, new JsonResult("Removed product from FavList"));
+                        return StatusCode(200, _favouritesService.GetAllFavProducts(prod.UserId));
                     }  
                 }
                 return StatusCode(400, new JsonResult("failed to add"));
@@ -70,7 +70,7 @@ namespace projectDB.Controllers
 
                     if (removedOrNot)
                     {
-                        return StatusCode(200, new JsonResult("removed from Favourites List"));
+                        return StatusCode(200, _favouritesService.GetAllFavProducts(favProd.UserId));
                     }
                 }
                 return StatusCode(400, new JsonResult("There is no product"));

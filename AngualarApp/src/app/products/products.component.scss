@@ -88,14 +88,21 @@
      
       }
     }
-    .icon-fav {
-      float: right;
-      font-size: 30px;
-      height: 27px;
-      width: 30px;
-      margin:0 10px 10px 0;
-      color: rgb(148, 164, 167);
-      cursor: pointer;
+
+    .icon{
+      .icon-fav {
+        float: right;
+        font-size: 30px;
+        height: 27px;
+        width: 30px;
+        margin:0 10px 10px 0;
+        color: rgb(148, 164, 167);
+        cursor: pointer;
+      }
+
+      .IntialfavColorChange{
+        color:rgb(13, 215, 241);
+      }
     }
 
     .icon-fav-active {

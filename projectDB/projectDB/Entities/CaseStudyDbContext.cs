@@ -20,5 +20,7 @@ namespace projectDB.Entities
 
         public DbSet<FavProducts> FavOrderItems { get; set; }
 
+        public DbSet<Cart> CartProducts { get; set; }
+
     }
 }
