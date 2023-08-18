@@ -44,7 +44,7 @@ export class ProductsComponent implements OnInit{
   }
 
   ngOnInit(){
-    
+
   }
 
 
@@ -141,14 +141,17 @@ displayCategory(event:any)
 /* <------------------------------------- Orders -------------------------------------> */
 
 //to add order
-addOrder(productId:number){
-  this.order = {
-    productId:productId,
-    userId:this.userId
+  addOrder(productId:number){
+  if(this.auth.isAuthenticated()){
+      this.order = {
+        productId:productId,
+        userId:this.userId
+      }
+      this.productdataservice.addOrderService(this.order).subscribe(response => {
+        console.log("order response",response)
+      });
+  } else{
+    alert("Please Login");}
   }
-  this.productdataservice.addOrderService(this.order).subscribe(response => {
-    console.log("order response",response)
-  });
-}
 
 }

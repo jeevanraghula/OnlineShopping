@@ -6,7 +6,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 // import { FavouritesComponent } from './favourites/favourites.component';
 import { MatIconModule } from '@angular/material/icon'
-// import { ProductsComponent } from './products/products.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { SearchpageComponent } from './searchpage/searchpage.component';
 import { OrdersComponent } from './header/orders/orders.component';
@@ -41,6 +41,7 @@ import { SearchpageComponent } from './searchpage/searchpage.component';
     BrowserModule,
     AppRoutingModule,
     MatIconModule,
+    MatProgressSpinnerModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule

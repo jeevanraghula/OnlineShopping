@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, filter, BehaviorSubject} from 'rxjs';
 import { UserModel } from '../models/UserModel';
+import { AddUserModel } from '../models/AddUserModel';
 import { AuthReponseModel } from '../models/AuthResponseModel';
 import { AuthService } from "../shared/auth.service";
 
@@ -23,5 +24,10 @@ export class UserService {
   //validating,user is a valid user or not 
   validateUser(user:UserModel):Observable<AuthReponseModel> {
     return this.http.post<AuthReponseModel>(this.api_path+"Authentication",user);
+  }
+  
+  //adding a new user, with default customer role
+  addUser(user: AddUserModel):Observable<any>{
+      return this.http.post<any>(this.api_path+"AddUser",user)
   }
 }
