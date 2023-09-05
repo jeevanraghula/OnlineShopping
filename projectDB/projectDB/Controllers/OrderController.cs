@@ -38,7 +38,7 @@ namespace projectDB.Controllers
                     Boolean o = _orderService.AddOrder(order,product.ProductId);
                     if(o)
                     {
-                        return StatusCode(400,new JsonResult("Order completed"));
+                        return StatusCode(200,new JsonResult("Order completed"));
                     }
                     else
                     {
@@ -81,10 +81,7 @@ namespace projectDB.Controllers
          * Place Order = collection of products in cart
          */
 
-        //public IActionResult PlaceOrder(int id)
-        //{
-        //    return true;
-        //}
+ 
 
 
         //delete orders
@@ -125,28 +122,6 @@ namespace projectDB.Controllers
                 throw;
             }
         }
-
-
-        ////all ordered items of a specific user
-        //[HttpGet, Route("GetAllOrderItems")]
-        //public IActionResult getAllOrderItems()
-        //{
-        //    try
-        //    {
-        //        List<OrderedProducts> orderItems = _orderItemsService.GetAllOrderItems();
-        //        if (orderItems != null)
-        //        {
-        //            return StatusCode(200, orderItems);
-        //        }
-        //        return StatusCode(400, "no orderItems found");
-
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //        throw;
-        //    }
-        //}
 
     }
 }

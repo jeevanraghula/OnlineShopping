@@ -26,7 +26,7 @@ namespace projectDB.Controllers
         }
         //add user(Register user)
         [HttpPost,Route("AddUser")]
-        [Authorize(Roles="admin")]
+        // [Authorize(Roles="admin")]
         public IActionResult AddUserC(User user)
         {
             try

@@ -2,12 +2,13 @@
     position: relative;
     display:flex;
     flex-direction: column;
-    top: 120px;
+    top: 110px;
     left: 32%;
-    height:500px;
+    //height:500px;
+    height: auto;
     width: 400px;
     background-color: rgb(129, 200, 209);
-    padding:1rem 2rem;
+    padding:1rem 2rem 3rem 2rem;
     border-radius: 8px;
     box-shadow: 4px 4px 19px 6px rgba(0, 0, 0, 0.2);
 
@@ -17,7 +18,7 @@
         font-size: 20px;
     }
     .form-item{
-        padding: 1rem 4rem;
+        padding: 0.8rem 4rem;
 
        label{
          font-size: 18px;
@@ -37,7 +38,14 @@
             }
         }
     }
-    
+    .switch{
+        text-align: center;
+        span{
+            cursor: pointer;
+            color: indigo;
+            text-decoration: underline;
+        }
+    }
     mat-icon{
         float: right;
         cursor:pointer;

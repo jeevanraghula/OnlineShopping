@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup,FormControl, FormArray, RequiredValidator } from '@angular/forms';
+import { FormGroup,FormControl, FormArray,Validator, Validators } from '@angular/forms';
 import { Route, Router } from '@angular/router';
 import { AuthReponseModel } from '../models/AuthResponseModel';
 import { UserService } from '../Services/user.service';
@@ -13,7 +13,8 @@ import { UserService } from '../Services/user.service';
 export class AuthComponent {
 
   public authForm: FormGroup;
-  aleardyUser=false;
+  alreadyUser=false;
+  newUser : boolean = false;
 
   constructor(private userService:UserService,private router:Router){
 
@@ -21,8 +22,8 @@ export class AuthComponent {
 
     ngOnInit(){
       this.authForm = new FormGroup({
-        username: new FormControl(),
-        password : new FormControl(),
+        username: new FormControl('',[Validators.required]),
+        password : new FormControl('',[Validators.required, Validators.minLength(8)]),
         email : new FormControl(),
         confirmPassword : new FormControl()
       });
@@ -31,8 +32,8 @@ export class AuthComponent {
 
     LoginUser(){
       //printing to console
-      console.log("username :"+this.authForm.get('username').value);
-      console.log("username :"+this.authForm.get('password').value);
+      //console.log("username :"+this.authForm.get('username').value);
+      //console.log("username :"+this.authForm.get('password').value);
       let username = this.authForm.get('username').value;
       let password = this.authForm.get('password').value;
 
@@ -42,22 +43,35 @@ export class AuthComponent {
         localStorage.setItem("userId",String(id));
         localStorage.setItem("jwt",token);
         console.log("userId :",Number(localStorage.getItem("userId")));
-        console.log("Token :",localStorage.getItem("jwt"));
+       // console.log("Token :",localStorage.getItem("jwt"));
 
-        //storing the JWT token response in the localStorage
-        
-        this.aleardyUser=true;
         this.userService.islogin.next(true);
-        // window.location.reload();
+        this.alreadyUser=true;
         this.router.navigate(["/"]);
       },
 
       error => {
-        this.aleardyUser=false;
+        this.alreadyUser=false;
       });
       
 
     }
+    
+    RegisterUser(){
+      let username = this.authForm.get('username').value;
+      let password = this.authForm.get('password').value;
+      let email = this.authForm.get('email').value;
+      let role = "customer"
+      this.userService.addUser({username,password,email,role}).subscribe(respone=>
+      {  console.log("response : ",respone)
+         this.LoginUser()},
+      error => {
+        console.log("error in registering")
+      });
 
+    }
 
+    createUser(){
+      this.newUser=!this.newUser;
+    }
 }
