@@ -14,7 +14,6 @@ export class ProductServiceService {
 
   private token:string;
   private userId:number;
-
   constructor(private http:HttpClient) {
     this.token = localStorage.getItem("jwt");
     // this.userId = Number(localStorage.getItem("userId"));
@@ -38,7 +37,7 @@ export class ProductServiceService {
 
   //Add to favourites 
   addToFavourites(Favproduct:FavModel):Observable<any>{
-    console.log("jwt token :",this.token);
+    //console.log("jwt token :",this.token);
     return this.http.post(this.api_path_favourite+"AddFavProduct",Favproduct,{
       headers : new HttpHeaders({
        // "content-Type":"text", //it is set by default to json
@@ -90,7 +89,6 @@ addOrderService(order : FavModel):Observable<string>{
     })
   });
 }
-
 
 //get all orders : accessing Orders component
 getAllOrdersService():Observable<OrderResponseModel[]>{

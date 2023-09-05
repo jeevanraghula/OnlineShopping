@@ -4,11 +4,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-// import { FavouritesComponent } from './favourites/favourites.component';
 import { MatIconModule } from '@angular/material/icon'
+import { MatDialogModule} from '@angular/material/dialog';
+import { MatButtonModule} from '@angular/material/button';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { SearchpageComponent } from './searchpage/searchpage.component';
 import { OrdersComponent } from './header/orders/orders.component';
 import { CartComponent } from './header/cart/cart.component';
 import { AuthComponent } from './auth/auth.component';
@@ -18,29 +18,33 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProductsComponent } from './products/products.component';
 import { ProductServiceService } from './Services/product-service.service';
 import { FavoritesComponent } from './header/favorites/favorites.component';
-import { SearchpageComponent } from './searchpage/searchpage.component';
+import { LoginDialogComponent } from './dialog/login-dialog/login-dialog.component';
+import { OrderDialogComponent } from './dialog/order-dialog/order-dialog.component';
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    // FavouritesComponent,
     ProductsComponent,
-    // SearchpageComponent,
-    // FavouritesComponent,
+
     OrdersComponent,
     CartComponent,
     AuthComponent,
     NoPageFoundComponent,
     ProductsComponent,
     FavoritesComponent,
-    SearchpageComponent
+    LoginDialogComponent,
+    OrderDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MatIconModule,
+    MatDialogModule,
+    MatButtonModule,
+    CanvasJSAngularChartsModule,
     MatProgressSpinnerModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,

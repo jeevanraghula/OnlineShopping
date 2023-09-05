@@ -43,12 +43,10 @@ export class AuthComponent {
         localStorage.setItem("userId",String(id));
         localStorage.setItem("jwt",token);
         console.log("userId :",Number(localStorage.getItem("userId")));
-        console.log("Token :",localStorage.getItem("jwt"));
+       // console.log("Token :",localStorage.getItem("jwt"));
 
-        //storing the JWT token response in the localStorage
-        
-        this.aleardyUser=true;
-        // this.router.navigate(['/login/',{id}]);
+        this.userService.islogin.next(true);
+        this.alreadyUser=true;
         this.router.navigate(["/"]);
       },
 

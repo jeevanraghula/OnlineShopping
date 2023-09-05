@@ -10,44 +10,27 @@ import { UserService } from '../Services/user.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  public isloggedin:boolean;
-  product:Products[];
+  islogin:boolean;
+  // product:Products[];
 
- constructor(private productdataService: ProductServiceService, private router : Router, public userService : UserService){
-    this.userService.islogin.subscribe(response =>{
-      this.isloggedin = response
-    });
-
-    this.productdataService.getAllProducts().subscribe(data=>
-      this.product = data
-    );
-
+ constructor(private productdataService: ProductServiceService, private router : Router, private userService : UserService){
+    this.userService.islogin.subscribe(x=>this.islogin=x);
+    // this.productdataService.getAllProducts().subscribe(data=>
+    //   this.product=data);
   }
 
   checkLogin(){
-    if(!this.isloggedin)  //changed
+    if(!this.islogin)  //changed
       this.router.navigateByUrl('authenticate');
     else{
-      //  window.location.reload();
-      localStorage.removeItem('jwt');
-      localStorage.removeItem('userId');
-      this.isloggedin = false;
-      this.userService.islogin.next(false);
-      // console.log("isLogin in service observble :",this.userService.islogin.subscribe(response => {
-      //   return response
-      // }));
-      this.router.navigateByUrl('/');
+      this.userService.openLoginDialog();
     }
   }
 
   searchproduct(event : any)
  {
-  this.product.forEach(element => { 
-    if(element.productName === event.target.value){
-      this.router.navigate(['/search', element.productName]);
-      event.target.value=""
-    }
-  });
-  
+   if(String(event.target.value).length>0)
+      this.userService.searchItem.next(String(event.target.value));
+   //this.router.navigate(['/', String(event.target.value)]);
  }
 }

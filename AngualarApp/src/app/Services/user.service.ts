@@ -5,6 +5,9 @@ import { UserModel } from '../models/UserModel';
 import { AddUserModel } from '../models/AddUserModel';
 import { AuthReponseModel } from '../models/AuthResponseModel';
 import { AuthService } from "../shared/auth.service";
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { LoginDialogComponent } from '../dialog/login-dialog/login-dialog.component';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +15,10 @@ import { AuthService } from "../shared/auth.service";
 export class UserService {
 
   islogin  =new BehaviorSubject<boolean>(false);
-  // checklogin= this.islogin.asObservable();
+  searchItem = new BehaviorSubject<String>("");
+  //checklogin= this.islogin.asObservable(); --> used when islogin private
 
-  constructor(private http:HttpClient,private authService:AuthService) { 
+  constructor(private http:HttpClient,private authService:AuthService,public dialog: MatDialog, private router: Router) { 
 
     this.islogin.next(this.authService.isAuthenticated());
 
@@ -29,5 +33,13 @@ export class UserService {
   //adding a new user, with default customer role
   addUser(user: AddUserModel):Observable<any>{
       return this.http.post<any>(this.api_path+"AddUser",user)
+  }
+
+  openLoginDialog(){
+    this.dialog.open(LoginDialogComponent,
+    { 
+      width: '320px',
+      closeOnNavigation: true
+    } );
   }
 }

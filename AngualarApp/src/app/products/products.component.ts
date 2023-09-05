@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-// import { Product } from '../models/model';
-// import { ProductdataService } from '../productdata.service'
 import { ProductServiceService } from "../Services/product-service.service";
 import { Observable, map, filter } from 'rxjs';
 import { Products,MatchedProduct } from '../models/ProductsModel';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FavModel } from '../models/FavProductsModel';
 import { AuthService } from '../shared/auth.service';
 import { UserService } from '../Services/user.service';
+import { OrderDialogComponent } from '../dialog/order-dialog/order-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-products',
@@ -19,7 +19,8 @@ export class ProductsComponent implements OnInit{
   public allProducts: Products[];
   public allFavProducts : Products[] = []; //for the intial rendering the page
   public favProducts : Products[];
-  public userId:number=0;
+  public userId:number;
+  public showProgressSpinner : boolean = true;
   //there are no favourite products
   public noFavProductsFound = false;
   //duplicate check
@@ -30,47 +31,40 @@ export class ProductsComponent implements OnInit{
   // public favColor=false;
   public categories:string[] = ["Apparels","Electronics","Footwear","Home Needs","Sports","Stationery"];
   
-  constructor(private productdataservice: ProductServiceService,private router:Router,private auth:AuthService,private userService:UserService) {
-    this.userId = Number(localStorage.getItem("userId"));
+  constructor(private productdataservice: ProductServiceService,
+              private router:Router,private auth:AuthService,
+              private userService:UserService,
+              private dialog : MatDialog) {
 
-    // //getting all fav products at intial rendering
-    //   if(this.userId!=0){
-    //     this.productdataservice.getAllFavProducts(this.userId).subscribe(Response => {
-    //       this.allFavProducts = Response;
-    //     });
-    //   }
-    
-    // //getting all products
-    // this.productdataservice.getAllProducts().subscribe(response => 
-    //   this.allProducts = response
-    //   );
-      // this.userId = Number(localStorage.getItem("userId")); 
-
-      // userService.islogin.subscribe(response => 
-      //   {
-      //     if(this.userId==0){
-      //       this.userId = Number(localStorage.getItem("userId"));
-      //     }
-      //   })
-
+    this.userId = Number(localStorage.getItem("userId")); 
+    //getting all fav products at intial rendering
+    this.userService.islogin.subscribe(response => {
+      if(response){
+        this.productdataservice.getUserFavProducts(this.userId).subscribe(data => {
+          this.allFavProducts = data;
+        },error=>{ 
+          console.error("Error loading favorites:", error);
+        });
+      }
+    });
   }
 
   ngOnInit(){
-
-    this.productdataservice.getAllProducts().subscribe(response => {
-      this.allProducts = response
-    });
-
-    //getting all fav products for specific user at intial rendering
-    
-    console.log("ng on init userId :",this.userId);
-      if(this.userId > 0){
-        this.productdataservice.getUserFavProducts(this.userId).subscribe(Response =>{
-          this.allFavProducts = Response
-        });
+    //getting all products
+    this.productdataservice.getAllProducts().subscribe(
+      response => {
+        this.allProducts = response;
+        setTimeout(() => {
+          this.showProgressSpinner = false; // Hide the progress spinner
+        }, 2000);
+      },
+      error => {
+        console.error("Error loading products:", error);
+        this.showProgressSpinner = false; // Hide the progress spinner even in case of an error
       }
-
-       //getting all products
+    );
+    //to invoke search function
+    this.userService.searchItem.subscribe(item=>this.searchProduct(item));
   }
 
 
@@ -84,11 +78,11 @@ export class ProductsComponent implements OnInit{
     if(this.auth.isAuthenticated()){
       this.userId = Number(localStorage.getItem("userId"));
       let productId = product.productId;
-      console.log("onclickOf fav :",this.userId);
+     // console.log("onclickOf fav :",this.userId);
       this.addTFavouriteProducts({productId,userId:this.userId});  
-      this.matchedProdcut(product); 
+      this.matchedProduct(product); 
     }
-    else{alert("Please Login");}
+    else{this.userService.openLoginDialog()}
   }
 
   //Adding favProducts 
@@ -98,8 +92,8 @@ export class ProductsComponent implements OnInit{
     });
   }
 
-  //To change the color of whilist icon
-  matchedProdcut(product:Products):Boolean{
+  //To change the color of favourites icon
+  matchedProduct(product:Products):Boolean{
     // console.log("start of matchProduct");
     // console.log("allFavProducts :",this.allFavProducts);  
     let p,isLoggedIn;
@@ -108,7 +102,7 @@ export class ProductsComponent implements OnInit{
         isLoggedIn = Response
         );
         // console.log("userlogin :",isLoggedIn);
-      if(isLoggedIn){
+      if(isLoggedIn && this.allFavProducts){
         // p = this.allFavProducts.includes(product);
         this.allFavProducts.forEach(function(favProd){
           // console.log("favProd :",favProd);
@@ -163,36 +157,53 @@ displayCategory(event:any)
     this.productdataservice.getAllProducts().subscribe(response => 
       this.allProducts = response.filter(x=>x.category===this.category) );   
   }
-
-
-/* <------------------------------------- Orders -------------------------------------> */
+/*<--------------------------search---------------------------->*/
+  //to perform search wrt products
+  searchProduct(name:String){
+    this.productdataservice.getAllProducts().subscribe(data => {
+      if(!name){
+        this.allProducts = data;
+      }
+      this.allProducts = data.filter(x =>
+        x.productName.toLowerCase().includes(name.toLowerCase())
+      );
+    });
+  }
+/* <------------------------ Orders ---------------------------> */
 
 //to add order
-  addOrder(productId:number){
-  if(this.auth.isAuthenticated()){
-      this.order = {
-        productId:productId,
-        userId:this.userId
-      }
-      this.productdataservice.addOrderService(this.order).subscribe(response => {
-        console.log("order response",response)
-      });
+ addOrder(productId:number){
+  if(this.auth.isAuthenticated()){ 
+    //dialog for order confirmation
+    const dialogRef = this.dialog.open(OrderDialogComponent, {width: '320px'} );
+    //after closing dialog 
+    dialogRef.afterClosed().subscribe(result=>{
+        if(result){
+          this.order = {
+            productId:productId,
+            userId:this.userId
+          }
+          this.productdataservice.addOrderService(this.order).subscribe(response => {
+           // console.log("order response",response)
+          });
+        }
+    });      
   } else{
-    alert("Please Login");}
+    this.userService.openLoginDialog()}
+} 
+  /*<-------------------------------- Cart ---------------------------------> */
+
+  addToCart(productId: number) {
+    if(this.auth.isAuthenticated()){ 
+      var cart = {
+        productId: productId,
+        userId: this.userId
+      }
+      this.productdataservice.addTocartService(cart).subscribe(response => {
+        console.log("order response", response)
+      });
+    } else{
+      this.userService.openLoginDialog()}
   }
-
-
-
-/*<-------------------------------- Cart ---------------------------------> */
-
-addToCart(productId:number){
-  var cart = {
-    productId:productId,
-    userId:this.userId
-  }
-  this.productdataservice.addTocartService(cart).subscribe(response => {
-    console.log("order response",response)
-  });
-}
 
 }

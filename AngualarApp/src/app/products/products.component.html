@@ -1,8 +1,8 @@
-<!-- <div *ngIf="showProgressSpinner" class="spinner-card">
+<div *ngIf="showProgressSpinner" class="spinner-card">
   <mat-spinner></mat-spinner>
 </div>
-<div *ngIf="!showProgressSpinner" class="products"> -->
-<div class="products">
+<div *ngIf="!showProgressSpinner" class="products">
+<!-- <div class="products"> -->
   <div class="category">
     <div class="category-2 item" (click)="displayCategory($event)"><img src="../../assets/appearles.png" alt=""><p>Apparels</p></div>
     <div class="category-1 item" (click)="displayCategory($event)"><img src="../../assets/electronics.png" alt=""><p>Electronics</p></div>
@@ -20,7 +20,7 @@
                       matTooltip="Add to favourites"
                       matTooltipPosition="right"
                       aria-label="icon that adds item to favourites"
-                      (click)="onClickFavProduct(product)" [ngClass]="{IntialfavColorChange:matchedProdcut(product)}">
+                      (click)="onClickFavProduct(product)" [ngClass]="{favColorChange : matchedProduct(product)}">
                       favorite
             </mat-icon> 
             <!-- {{favColor}} -->
