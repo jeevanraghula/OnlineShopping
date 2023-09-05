@@ -17,9 +17,9 @@ import { UserService } from '../Services/user.service';
 
 export class ProductsComponent implements OnInit{
   public allProducts: Products[];
-  public allFavProducts : Products[]; //for the intial rendering the page
+  public allFavProducts : Products[] = []; //for the intial rendering the page
   public favProducts : Products[];
-  public userId:number;
+  public userId:number=0;
   //there are no favourite products
   public noFavProductsFound = false;
   //duplicate check
@@ -31,20 +31,46 @@ export class ProductsComponent implements OnInit{
   public categories:string[] = ["Apparels","Electronics","Footwear","Home Needs","Sports","Stationery"];
   
   constructor(private productdataservice: ProductServiceService,private router:Router,private auth:AuthService,private userService:UserService) {
-    //getting all fav products at intial rendering
-    this.productdataservice.getAllFavProducts().subscribe(Response => {
-      this.allFavProducts = Response;
-    });
+    this.userId = Number(localStorage.getItem("userId"));
+
+    // //getting all fav products at intial rendering
+    //   if(this.userId!=0){
+    //     this.productdataservice.getAllFavProducts(this.userId).subscribe(Response => {
+    //       this.allFavProducts = Response;
+    //     });
+    //   }
     
-    //getting all products
-    this.productdataservice.getAllProducts().subscribe(response => 
-      this.allProducts = response
-      );
-      this.userId = Number(localStorage.getItem("userId")); 
+    // //getting all products
+    // this.productdataservice.getAllProducts().subscribe(response => 
+    //   this.allProducts = response
+    //   );
+      // this.userId = Number(localStorage.getItem("userId")); 
+
+      // userService.islogin.subscribe(response => 
+      //   {
+      //     if(this.userId==0){
+      //       this.userId = Number(localStorage.getItem("userId"));
+      //     }
+      //   })
+
   }
 
   ngOnInit(){
 
+    this.productdataservice.getAllProducts().subscribe(response => {
+      this.allProducts = response
+    });
+
+    //getting all fav products for specific user at intial rendering
+    
+    console.log("ng on init userId :",this.userId);
+      if(this.userId > 0){
+        this.productdataservice.getUserFavProducts(this.userId).subscribe(Response =>{
+          this.allFavProducts = Response
+        });
+      }
+
+       //getting all products
   }
 
 
@@ -58,6 +84,7 @@ export class ProductsComponent implements OnInit{
     if(this.auth.isAuthenticated()){
       this.userId = Number(localStorage.getItem("userId"));
       let productId = product.productId;
+      console.log("onclickOf fav :",this.userId);
       this.addTFavouriteProducts({productId,userId:this.userId});  
       this.matchedProdcut(product); 
     }
@@ -153,5 +180,19 @@ displayCategory(event:any)
   } else{
     alert("Please Login");}
   }
+
+
+
+/*<-------------------------------- Cart ---------------------------------> */
+
+addToCart(productId:number){
+  var cart = {
+    productId:productId,
+    userId:this.userId
+  }
+  this.productdataservice.addTocartService(cart).subscribe(response => {
+    console.log("order response",response)
+  });
+}
 
 }

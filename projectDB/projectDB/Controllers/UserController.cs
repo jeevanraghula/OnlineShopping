@@ -109,7 +109,7 @@ namespace projectDB.Controllers
 
 
         ////Authenticate user
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpPost,Route("Authentication")]
 
         public IActionResult Authentication([FromBody] AuthRequest authRequest)

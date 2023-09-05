@@ -36,24 +36,26 @@ export class AuthComponent {
       //console.log("username :"+this.authForm.get('password').value);
       let username = this.authForm.get('username').value;
       let password = this.authForm.get('password').value;
+
       this.userService.validateUser({username,password}).subscribe(response=>{
         const token = response.token;
-        let id= response.userId;
+        let id = response.userId;
         localStorage.setItem("userId",String(id));
-        //console.log("userId :",response.userId);
-       // console.log("userName :",response.userName);
-        //storing the JWT token response in the localStorage
         localStorage.setItem("jwt",token);
+        console.log("userId :",Number(localStorage.getItem("userId")));
+        console.log("Token :",localStorage.getItem("jwt"));
 
-        this.userService.islogin.next(true);
+        //storing the JWT token response in the localStorage
         
-        this.alreadyUser=true;
+        this.aleardyUser=true;
         // this.router.navigate(['/login/',{id}]);
         this.router.navigate(["/"]);
       },
+
       error => {
         this.alreadyUser=false;
       });
+      
 
     }
     

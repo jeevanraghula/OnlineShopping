@@ -10,23 +10,33 @@ import { UserService } from '../Services/user.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  islogin:boolean;
+  public isloggedin:boolean;
   product:Products[];
 
- constructor(private productdataService: ProductServiceService, private router : Router, private userService : UserService){
-    this.userService.checklogin.subscribe(x=>this.islogin=x);
+ constructor(private productdataService: ProductServiceService, private router : Router, public userService : UserService){
+    this.userService.islogin.subscribe(response =>{
+      this.isloggedin = response
+    });
+
     this.productdataService.getAllProducts().subscribe(data=>
-      this.product=data);
+      this.product = data
+    );
+
   }
 
   checkLogin(){
-    if(!this.islogin)
+    if(!this.isloggedin)  //changed
       this.router.navigateByUrl('authenticate');
     else{
-      this.userService.islogin.next(false);
+      //  window.location.reload();
       localStorage.removeItem('jwt');
       localStorage.removeItem('userId');
-      this.router.navigate(['/']);
+      this.isloggedin = false;
+      this.userService.islogin.next(false);
+      // console.log("isLogin in service observble :",this.userService.islogin.subscribe(response => {
+      //   return response
+      // }));
+      this.router.navigateByUrl('/');
     }
   }
 

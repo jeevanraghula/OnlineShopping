@@ -46,6 +46,15 @@
     justify-content: space-evenly;
     margin-left: 20px;
     align-items: center;
+
+
+    .nav-tab{
+        cursor: pointer;
+      }
+    
+    .nav-tab:hover {
+        color: #21b7e9;
+      }
   }
 
   .nav-item0{

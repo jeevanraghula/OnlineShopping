@@ -83,9 +83,8 @@ namespace projectDB.Controllers
         }
 
         //get all fav products
-        [HttpPost, Route("GetAllFavouriteProducts")]
-        [Authorize]
-        public IActionResult GetAllFavProducts([FromBody] int userId)
+        [HttpGet, Route("GetAllFavouriteProducts/{userId}")]
+        public IActionResult GetAllFavProducts([FromRoute]  int userId)
         {
             //var user = HttpContext.User;
             //int localUserId = user.Identity.Name;

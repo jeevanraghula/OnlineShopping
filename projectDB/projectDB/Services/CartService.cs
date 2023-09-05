@@ -1,9 +1,8 @@
 ﻿using projectDB.Entities;
 using projectDB.Models;
-
 namespace projectDB.Services
 {
-    public class CartService
+    public class CartService:ICartService
     {
         private readonly CaseStudyDbContext _CartDBcontext;
         public CartService(CaseStudyDbContext cartDBcontext)
@@ -11,28 +10,22 @@ namespace projectDB.Services
             _CartDBcontext = cartDBcontext;
         }
 
-        //Add and remove form  cart
-        Boolean AddToCart(Cart product)
+        //Add to cart
+        public Boolean AddToCart(Cart product)
         {
             try
             {
                 //to get user
                 User user = _CartDBcontext.Users.FirstOrDefault(e => e.UserId == product.UserId);
-                if (user != null)
+                Product productFound = _CartDBcontext.Products.FirstOrDefault(p => p.ProductId == product.ProductId);
+
+                if (user != null && productFound != null)
                 {
-                    Cart dupCart = (from c in _CartDBcontext.CartProducts where c.ProductId == product.ProductId select c).FirstOrDefault(e => e.UserId == product.UserId);
-                    if (dupCart == null)
-                    {
-                        _CartDBcontext.CartProducts.Add(product);
-                        _CartDBcontext.SaveChanges();
-                        return true;
-                    }
-                    else
-                    {
-                        _CartDBcontext.CartProducts.Remove(product);
-                        _CartDBcontext.SaveChanges();           
-                    }                  
-                }          
+                    _CartDBcontext.CartProducts.Add(product);
+                    _CartDBcontext.SaveChanges();
+                    return true;
+                }
+                return false;
             }
             catch(Exception)
             {
@@ -42,8 +35,32 @@ namespace projectDB.Services
         }
 
 
+        //remove from cart 
+        public Boolean RemoveFromCart(Cart product)
+        {
+
+            try
+            {
+                // valid user & product or not
+                User user = _CartDBcontext.Users.FirstOrDefault(e => e.UserId == product.UserId);
+                Product productFound = _CartDBcontext.Products.FirstOrDefault(p => p.ProductId == product.ProductId);
+
+                if (user != null && productFound != null)
+                {
+                    _CartDBcontext.CartProducts.Remove(product);
+                    _CartDBcontext.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         //To get all cart products
-        List<Product> GetAllCartProducts(int userId)
+        public List<Product> GetAllCartProducts(int userId)
         {
             try
             {
