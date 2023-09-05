@@ -17,7 +17,7 @@ export class FavoritesComponent {
   //getting all fav products
   constructor(private productService:ProductServiceService,private router:Router){
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.productService.getAllFavProducts().subscribe(response =>{
+    this.productService.getUserFavProducts(this.userId).subscribe(response =>{
       this.onlyFavProducts = response
     })
   }

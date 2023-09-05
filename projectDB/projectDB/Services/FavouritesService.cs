@@ -25,7 +25,7 @@ namespace projectDB.Services
                 {
                     FavProducts dupFav = (from f in _favDBcontext.FavOrderItems where f.ProductId == product.ProductId select f).FirstOrDefault(e => e.UserId == product.UserId);
 ;
-                    //Console.WriteLine("dup element :", dupFav);
+         
                     if (dupFav == null) //add to favorites 
                     {
                         _favDBcontext.FavOrderItems.Add(product);
@@ -86,16 +86,16 @@ namespace projectDB.Services
         public List<Product> GetAllFavProducts(int userId)
         {
             //used inner join (common elements were taken out in favOrderItems and Products)
-            if(userId >= 0)
-            {
+            //if(userId > 0)
+            //{
                 List<Product> favProducts = (from p in (from f in _favDBcontext.FavOrderItems
                                                         where f.UserId == userId
                                                         select f)
                                              join pp in _favDBcontext.Products on p.ProductId equals pp.ProductId
                                              select pp).ToList();
                 return favProducts;
-            }
-            return null;  
+            //}
+            //return null;  
         }
 
         //public Boolean dupCeck(FavProducts dup)

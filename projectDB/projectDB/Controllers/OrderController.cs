@@ -76,6 +76,17 @@ namespace projectDB.Controllers
             }
         }
 
+
+        /*
+         * Place Order = collection of products in cart
+         */
+
+        //public IActionResult PlaceOrder(int id)
+        //{
+        //    return true;
+        //}
+
+
         //delete orders
         [HttpDelete,Route("DeleteOrder/{id}")]
         public IActionResult DeleteOrder(int id)

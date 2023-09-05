@@ -27,7 +27,9 @@ namespace projectDB
             builder.Services.AddTransient<IProductService, ProductService>();
             builder.Services.AddTransient<IOrderService, OrderService>();
             //builder.Services.AddTransient<IOrderedProductsService, OrderedProductsService>();
-            builder.Services. AddTransient<IFavouritesService, FavouritesService>();
+            builder.Services.AddTransient<IFavouritesService, FavouritesService>();
+            builder.Services.AddTransient<ICartService, CartService>();
+            
 
             builder.Services.AddControllers();
 

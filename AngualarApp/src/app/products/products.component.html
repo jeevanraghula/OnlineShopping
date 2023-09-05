@@ -25,7 +25,7 @@
             <div class="text">{{product.productName}}</div>
             <div class="text">Price <b>{{'₹'+product.price}}</b></div>
             <div class="card-buttons">
-              <button class="cart btn"><b>Cart</b></button>
+              <button class="cart btn" (click)="addToCart(product.productId)"><b>Cart</b></button>
               <button class="order btn" (click)="addOrder(product.productId)"><b>Order</b></button>
             </div>
         </div>

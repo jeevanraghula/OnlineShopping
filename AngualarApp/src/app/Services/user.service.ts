@@ -11,7 +11,7 @@ import { AuthService } from "../shared/auth.service";
 export class UserService {
 
   islogin  =new BehaviorSubject<boolean>(false);
-  checklogin= this.islogin.asObservable();
+  // checklogin= this.islogin.asObservable();
 
   constructor(private http:HttpClient,private authService:AuthService) { 
 
